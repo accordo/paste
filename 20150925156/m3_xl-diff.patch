@@ -1,0 +1,100 @@
+diff --git a/Demo/STA10XX_M3_emIDE_GCC/STA10XX_BootFlow.c b/Demo/STA10XX_M3_emIDE_GCC/STA10XX_BootFlow.c
+old mode 100644
+new mode 100755
+index caceffb..e5cf708
+--- a/Demo/STA10XX_M3_emIDE_GCC/STA10XX_BootFlow.c
++++ b/Demo/STA10XX_M3_emIDE_GCC/STA10XX_BootFlow.c
+@@ -364,12 +364,15 @@ bool prvBootSystem(void)
+ #endif
+ 
+         TRACE_BOOT("LOADING R4 XLOADER..............");
+-
++#if 0
+         if(!ReadImage(addr, (u32 *)SystemConfig.R4_xloader_load_address, SystemConfig.R4_xloader_size))
+         {
+             TRACE_ERR("prvBootSystem: error: cannot read R4 xloader\r\n");
+             return FALSE;
+         }
++#else
++        TRACE_BOOT("HAVE YOU R4 XLOADER BY JLINK ?");
++#endif
+ 
+         TRACE_BOOT("DONE\r\n");
+     }
+@@ -388,13 +391,16 @@ bool prvBootSystem(void)
+ #endif
+ 
+         TRACE_BOOT("LOADING R4 OS...................");
+-
++#if 0
+         if(!ReadImage(addr, (u32 *)SystemConfig.R4_os_load_address, SystemConfig.R4_os_size))
+         {
+             TRACE_ERR("prvBootSystem: error: cannot read R4 os\r\n");
+             return FALSE;
+         }
++#else
++        TRACE_BOOT("GIVED TO R4 Loader\r\n");
+ 
++#endif
+         TRACE_BOOT("DONE\r\n");
+     }
+ 
+diff --git a/Demo/STA10XX_M3_emIDE_GCC/STA10XX_Startup.s b/Demo/STA10XX_M3_emIDE_GCC/STA10XX_Startup.s
+old mode 100644
+new mode 100755
+index 6410e72..a4102eb
+--- a/Demo/STA10XX_M3_emIDE_GCC/STA10XX_Startup.s
++++ b/Demo/STA10XX_M3_emIDE_GCC/STA10XX_Startup.s
+@@ -45,7 +45,7 @@
+ 
+ 
+ _vectors:
+-  .word __stack_end__
++  bl    reset_handler
+   .word reset_handler
+   .word NMIException
+   .word HFHandler
+@@ -104,6 +104,8 @@ _vectors:
+   .thumb_func
+ 
+ reset_handler:
++  ldr r0, =__stack_end__
++  mov sp, r0
+ 
+   /* If this is a RAM build, configure vector table offset register to point
+      to the RAM vector table. */
+diff --git a/Demo/STA10XX_M3_emIDE_GCC/sta10xx_boot_config.h b/Demo/STA10XX_M3_emIDE_GCC/sta10xx_boot_config.h
+old mode 100644
+new mode 100755
+index 2454b5f..a8229d0
+--- a/Demo/STA10XX_M3_emIDE_GCC/sta10xx_boot_config.h
++++ b/Demo/STA10XX_M3_emIDE_GCC/sta10xx_boot_config.h
+@@ -146,10 +146,10 @@ the normal flashing procedure. At contrary, let's boot */
+ #define M3_XLOADER_MAX_SIZE         0x020000
+ #define R4_XLOADER_MAX_SIZE         0x020000
+ #define CONFIG_STRUCT_MAX_SIZE      0x000200
+-#define R4_OS_MAX_SIZE              0xA00000
+-#define M3_OS_MAX_SIZE              0x020000
+-#define FILE1_MAX_SIZE              0xA00000
+-#define FILE2_MAX_SIZE              0x020000
++#define R4_OS_MAX_SIZE              0xB00000
++#define M3_OS_MAX_SIZE              0x000000
++#define FILE1_MAX_SIZE              0x000000
++#define FILE2_MAX_SIZE              0x000000
+ #define CRC_MAX_SIZE                0x000200
+ #define SPLASH_MAX_SIZE             0x0BB800
+ #define DSP_MAX_SIZE                0x020000
+diff --git a/Makefile b/Makefile
+index 04d4194..ae34ebb 100755
+--- a/Makefile
++++ b/Makefile
+@@ -84,6 +84,9 @@ all:
+ # arm-none-eabi-objcopy.exe -O binary output/Production_SQI_xloader/exe/STA10XX_M3.elf ./bin/M3_xl_sqi_prod.bin
+ # Process terminated with status 0 (0 minutes, 19 seconds)
+ # 0 errors, 0 warnings (0 minutes, 19 seconds)
++
++flash:
++	JLink.exe flash.txt
+  
+ clean:
+ 	rm -f $(OBJS) STA10XX_M3.elf STA10XX_M3.elf.map M3_xl_sqi_prod.bin

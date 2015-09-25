@@ -1,0 +1,82 @@
+
+
+*************************
+
+Accordo2-M3 SQI flasher v1.1.4 
+
+*************************
+
+
+
+ SQI_Init: Unknown serial NOR manufacturer 0xff
+
+[    0.000000] E: prvSetupHardware: cannot init serial NOR memory
+
+
+
+
+
+********** SYSTEM SOFTWARE *********
+
+
+
+UPDATING SPLASH SCREEN .........size: 0xbb800 -> DONE
+
+UPDATING M3 xloader.............size: 0x7442 -> DONE
+
+UPDATING R4 xloader.............size: 0x7c7c -> DONE
+
+UPDATING R4 OS..................size: 0x2bc1b2 -> DONE
+
+
+
+************************************
+
+
+
+
+
+******* SYSTEM CONFIGURATION *******
+
+
+
+UPDATING SYSTEM CONFIGURATION...DONE
+
+UPDATING SYSTEM CHECKSUM........DONE
+
+
+
+************************************
+
+
+
+************************************
+
+FLASHER: COMPLETED
+
+************************************
+
+[   ***************************
+
+Accordo2-M3 xloader v1.1.4
+
+***************************
+
+
+
+BOOT SOURCE: Macronix serial NOR device detected
+
+Booting.........................
+
+
+
+STARTING R4 CORE................DONE
+
+
+
+************************************
+
+XLOADER: COMPLETED
+
+************************************
+
